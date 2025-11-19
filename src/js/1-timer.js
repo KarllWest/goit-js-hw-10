@@ -1,22 +1,85 @@
-import flatpickr from 'flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
-import '../css/1-timer.css';
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import iziToast from "izitoast";
+import "izitoast/dist/css/iziToast.min.css";
+import icon from '/img/error.svg';
 
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+const startBtn = document.querySelector("[data-start]");
+const daysEl = document.querySelector("[data-days]");
+const hoursEl = document.querySelector("[data-hours]");
+const minutesEl = document.querySelector("[data-minutes]");
+const secondsEl = document.querySelector("[data-seconds]");
+const inputEl = document.querySelector("#datetime-picker");
 
-const refs = {
-  btn: document.querySelector('[data-start]'),
-  date: document.querySelector('#datetime-picker'),
-  hrs: document.querySelector('[data-hours]'),
-  days: document.querySelector('[data-days]'),
-  sec: document.querySelector('[data-seconds]'),
-  min: document.querySelector('[data-minutes]'),
+let userSelectedDate = null;
+let timerId = null;
+
+startBtn.disabled = true;
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    const selectedDate = selectedDates[0];
+    if (selectedDate <= new Date()) {
+      iziToast.error({
+        title: "Error",
+        titleSize: '16',
+        titleWeight: '700',
+        message: "Please choose a date in the future",
+        iconUrl: icon,
+        position: "topRight",
+        messageColor: '#fff',
+        messageSize: '16',
+        backgroundColor: '#ef4040',
+        progressBarColor: '#b51b1b',
+        theme: 'dark',
+        close: true, 
+        class: "my-toast",
+      });
+      
+      startBtn.disabled = true;
+    } else {
+      userSelectedDate = selectedDate;
+      startBtn.disabled = false;
+    }
+  },
 };
 
+flatpickr(inputEl, options);
 
-const pad = num => num.toString().padStart(2, '0');
+startBtn.addEventListener("click", () => {
+  startBtn.disabled = true;
+  inputEl.disabled = true;
 
+  timerId = setInterval(() => {
+    const now = new Date();
+    const diff = userSelectedDate - now;
+
+    if (diff <= 0) {
+      clearInterval(timerId);
+      updateTimerUI({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      inputEl.disabled = false;
+      return;
+    }
+
+    const time = convertMs(diff);
+    updateTimerUI(time);
+  }, 1000);
+});
+
+function updateTimerUI({ days, hours, minutes, seconds }) {
+  daysEl.textContent = addLeadingZero(days);
+  hoursEl.textContent = addLeadingZero(hours);
+  minutesEl.textContent = addLeadingZero(minutes);
+  secondsEl.textContent = addLeadingZero(seconds);
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, "0");
+}
 
 function convertMs(ms) {
   const second = 1000;
@@ -31,56 +94,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-
-let userSelectedDate;
-
-const datePick = flatpickr(refs.date, {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    userSelectedDate = selectedDates[0];
-    
-    if (userSelectedDate < new Date()) {
-      iziToast.show({
-        message: 'Please choose a date in the future',
-        class: 'toast',
-        position: 'topRight',
-      });
-      refs.btn.setAttribute('disabled', '');
-      return;
-    }
-    refs.btn.removeAttribute('disabled', '');
-  },
-});
-
-
-const timer = date => {
-  const interval = setInterval(() => {
-    const timeDiff = date - new Date();
-    const time = convertMs(timeDiff);
-
-    const { days, hours, minutes, seconds } = time;
-    refs.days.textContent = pad(days);
-    refs.hrs.textContent = pad(hours);
-    refs.min.textContent = pad(minutes);
-    refs.sec.textContent = pad(seconds);
-
-  
-    if (timeDiff < 1000) {
-      clearInterval(interval);
-      refs.date.removeAttribute('disabled', '');
-    }
-  }, 1000);
-};
-
-
-refs.btn.setAttribute('disabled', '');
-
-refs.btn.addEventListener('click', () => {
-  timer(userSelectedDate);
-  refs.btn.setAttribute('disabled', '');
-  refs.date.setAttribute('disabled', '');
-});
