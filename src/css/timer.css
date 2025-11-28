@@ -1,0 +1,148 @@
+section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 120px;         
+}
+
+#datetime-picker {
+    width: 272px;
+    padding: 8px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    color: #2e2f42;
+    margin-right: 4px;
+    margin-bottom: 32px;
+    border-radius: 4px;
+    border: 1px solid #808080;
+    outline: none;
+}
+
+#datetime-picker:hover {
+    border: 1px solid #000;
+    color: #ff9000;
+}
+
+#datetime-picker:focus {
+    border: 1px solid #ff9000;
+    color: #000;
+}
+
+#datetime-picker:disabled {
+    border: 1px solid #808080;
+    color: #808080;
+    cursor: not-allowed;
+}
+
+button[data-start] {
+    width: 75px;
+    height: 42px;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    background-color: #4e75ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[data-start]:disabled {
+    background-color: #cfcfcf;
+    color: #989898;
+    cursor: not-allowed;
+}
+
+button[data-start]:hover:enabled {
+    background-color: #6c8cff;
+}
+
+body .flatpickr-calendar {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    text-align: center;
+    color: #666;
+}
+
+body .flatpickr-day.today {
+    border: 1px solid #ff9000;
+    color: #fff;
+    background-color: #4e75ff;
+}
+
+body .flatpickr-day.selected {
+    background-color: #ff9000;
+    color: #fff;
+    border: 1px solid #4e75ff;
+}
+
+body .flatpickr-day:hover {
+    background-color: #c1c1c1;
+    color: #666;
+}
+
+.timer {
+    display: flex;
+    gap: 24px;
+    margin-top: 32px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 8px;
+    height: 100px;
+    width: 80px;
+    padding: 15px;
+    box-shadow: 0 8px 16px rgb(248, 125, 1),
+                0 8px 16px rgb(244, 167, 1);
+    transition: transform 500ms ease-in-out;
+}
+
+.field:hover {
+    transform: scale(1.08);
+}
+
+.value {
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    color: #2e2f42;
+}
+
+.label {
+    margin-top: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #2e2f42;
+}
+
+body .iziToast.my-toast>.iziToast-close {
+    background: url("/img/close.svg") no-repeat center center;
+    background-size: auto;
+    opacity: 1;
+    transition: none;
+}
+
+body .iziToast.my-toast>.iziToast-close:hover {
+    background: url("/img/close.svg") no-repeat center center;
+    background-size: 18px 18px;
+    opacity: 1;
+}
